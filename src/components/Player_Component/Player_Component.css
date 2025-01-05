@@ -1,0 +1,23 @@
+.player_component {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 20px;
+    border-radius: 12px;
+    position: relative;
+    /* border: 1px solid white; */
+}
+
+.caption-container {
+    position: relative;
+    z-index: 1; /* Ensure captions are above the audio player */
+}
+
+.audio-player-container {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%); /* Center the audio player */
+    z-index: 2; /* Ensure audio player is below the transcription text */
+    width: 100%; /* Ensure the player stretches to full width */
+}
