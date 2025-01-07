@@ -1,13 +1,12 @@
-import { useState } from "react";
+import React, { useState, useCallback } from "react";
 import { useFileContext } from "../../App";
 import { useAudioContext } from "../Player_Component/Player_Component";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlay, faPause, faForward, faBackward } from "@fortawesome/free-solid-svg-icons";
+import { faPlay, faPause, faRotateRight, faRotateLeft } from "@fortawesome/free-solid-svg-icons";
 import './Audio_Player_Component.css';
+import dune from '../../assets/dune.png';
 
-
-
-const Audio_Player_Component = () => {
+const Audio_Player_Component = React.memo(() => {
   const { audioFile } = useFileContext();
   const { audioRef } = useAudioContext();
 
@@ -15,15 +14,8 @@ const Audio_Player_Component = () => {
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
 
-  // Helper function to format time in min:seconds
-  const formatTime = (time: number) => {
-    const minutes = Math.floor(time / 60);
-    const seconds = Math.floor(time % 60).toString().padStart(2, '0');
-    return `${minutes}:${seconds}`;
-  };
-
-  // Play or pause the audio
-  const togglePlayPause = () => {
+  // Memoized callback for toggling play/pause
+  const togglePlayPause = useCallback(() => {
     if (audioRef.current) {
       if (isPlaying) {
         audioRef.current.pause();
@@ -32,50 +24,48 @@ const Audio_Player_Component = () => {
       }
       setIsPlaying(!isPlaying);
     }
-  };
+  }, [isPlaying, audioRef]);
 
-  // Update the current time
-  const handleTimeUpdate = () => {
+  // Memoized callback for updating current time
+  const handleTimeUpdate = useCallback(() => {
     if (audioRef.current) {
       setCurrentTime(audioRef.current.currentTime);
     }
-  };
+  }, [audioRef]);
 
   // Seek the audio
-  const handleSeek = (event: { target: { value: any; }; }) => {
+  const handleSeek = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
+    const seekTime = Number(event.target.value);
     if (audioRef.current) {
-      audioRef.current.currentTime = Number(event.target.value);
-      setCurrentTime(Number(event.target.value));
+      audioRef.current.currentTime = seekTime;
+      setCurrentTime(seekTime);
     }
-  };
+  }, [audioRef]);
 
-  // Update duration when the audio metadata is loaded
-  const handleLoadedMetadata = () => {
+  // Set duration after metadata is loaded
+  const handleLoadedMetadata = useCallback(() => {
     if (audioRef.current) {
       setDuration(audioRef.current.duration);
     }
-  };
+  }, [audioRef]);
 
   // Move audio forward or backward
-  const handleForward = () => {
+  const handleForward = useCallback(() => {
     if (audioRef.current) {
-      audioRef.current.currentTime = Math.min(
-        audioRef.current.currentTime + 5,
-        duration
-      );
+      audioRef.current.currentTime = Math.min(audioRef.current.currentTime + 5, duration);
     }
-  };
+  }, [audioRef, duration]);
 
-  const handleBackward = () => {
+  const handleBackward = useCallback(() => {
     if (audioRef.current) {
       audioRef.current.currentTime = Math.max(audioRef.current.currentTime - 5, 0);
     }
-  };
+  }, [audioRef]);
 
   return (
-    <div className="audio_player">
+    <div className="audio_player_container">
       {audioFile ? (
-        <div>
+        <div className="audio_player">
           <audio
             ref={audioRef}
             onTimeUpdate={handleTimeUpdate}
@@ -83,26 +73,26 @@ const Audio_Player_Component = () => {
           >
             <source src={URL.createObjectURL(audioFile)} type={audioFile.type} />
           </audio>
+          <img src={dune} className="cover_image" alt="" />
           <div className="audio_controls">
-            <button className="reverse" onClick={handleBackward}>
-              <FontAwesomeIcon icon={faBackward} />
-            </button>
-            <button className="play" onClick={togglePlayPause}>
-              <FontAwesomeIcon icon={isPlaying ? faPause : faPlay} />
-            </button>
-            <button className="forward" onClick={handleForward}>
-              <FontAwesomeIcon icon={faForward} />
-            </button>
+            <div className="buttons">
+                <button className="reverse" onClick={handleBackward}>
+                    <FontAwesomeIcon icon={faRotateLeft} />
+                </button>
+                <button className="play" onClick={togglePlayPause}>
+                    <FontAwesomeIcon icon={isPlaying ? faPause : faPlay} />
+                </button>
+                <button className="forward" onClick={handleForward}>
+                    <FontAwesomeIcon icon={faRotateRight} />
+                </button>
+            </div>
             <input
               type="range"
               min="0"
               max={duration}
               value={currentTime}
-              onChange={handleSeek}
+              onInput={handleSeek}
             />
-            <span>
-              {formatTime(currentTime)} / {formatTime(duration)}
-            </span>
           </div>
         </div>
       ) : (
@@ -110,6 +100,6 @@ const Audio_Player_Component = () => {
       )}
     </div>
   );
-};
+});
 
 export default Audio_Player_Component;

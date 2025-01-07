@@ -1,21 +1,25 @@
 /* Audio Player Wrapper */
 .audio_player {
-    max-width: 40%;
-    margin: 20px auto;
-    margin-bottom: -20px;
-    padding: 20px;
+    height: 52vh;
+    padding: 60px 30px;
     border-radius: 12px;
-    background-color: rgba(255, 255, 255, 0.1); /* Transparent white */
+    background-color: rgba(255, 255, 255, 0.3); /* Transparent white */
     backdrop-filter: blur(10px); /* Blurring effect */
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Soft shadow for depth */
     color: #fff; /* Ensure text is visible */
     transition: background-color 0.3s ease;
-    position: relative;
-    z-index: 2; /* Ensure player is on top of the transcription */
     display: flex;
     flex-direction: column;
     align-items: center; /* Center content vertically */
     justify-content: center; /* Center content horizontally */
+    min-width: 280px;
+}
+
+.cover_image{
+    height: 200px;
+    width: 200px;
+    margin-bottom: 20px;
+    border-radius: 12px;
 }
 
 /* Hide the native audio element */
@@ -28,8 +32,16 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 15px;
+    flex-direction: column;
+    gap: 50px;
     margin-top: 10px;
+    width: 100%;
+}
+
+.audio_controls .buttons {
+    display: flex;
+    justify-content: space-between;
+    min-width: 200px;
 }
 
 /* Buttons */
@@ -37,7 +49,7 @@
     background: none;
     color: rgba(255, 99, 71, 0.9);
     border: none;
-    padding: 10px 20px;
+    padding: 10px 0px;
     border-radius: 5px;
 }
 
@@ -45,18 +57,19 @@
     transform: scale(1.2);
 }
 
+
 .audio_controls .play svg{
-    font-size: 24px;
+    font-size: 30px;
 }
 
 .audio_controls .reverse,
 .audio_controls .forward svg {
-    font-size: 18px;
+    font-size: 20px;
 }
 
 /* Seek Bar */
 .audio_controls input[type="range"] {
-    width: 150px;
+    width: 100%;
     height: 5px;
     -webkit-appearance: none;
     appearance: none;
@@ -71,7 +84,7 @@
     appearance: none;
     width: 12px;
     height: 12px;
-    background: rgb(10, 0, 70);;
+    background: rgb(3, 0, 67);
     border-radius: 50%;
     cursor: pointer;
     transition: transform 0.2s ease, background 0.3s ease;
@@ -82,12 +95,6 @@
     background: rgba(255, 99, 71, 1);
 }
 
-/* Time Display */
-.audio_controls span {
-    font-size: 14px;
-    color: rgb(10, 0, 70); /* Make sure the time text stands out */
-    font-weight: 500;
-}
 
 /* Progress Bar for Audio */
 .audio_progress {
