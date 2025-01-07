@@ -2,7 +2,7 @@
 .audio_player {
     height: 52vh;
     padding: 60px 30px;
-    border-radius: 30px;
+    border-radius: 42px;
     /*background-color: rgba(255, 255, 255, 0.3); /* Transparent white */
     /*backdrop-filter: blur(10px); /* Blurring effect */
     /*box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Soft shadow for depth */
