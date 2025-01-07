@@ -3,10 +3,11 @@
     height: 52vh;
     padding: 60px 30px;
     border-radius: 12px;
-    background-color: rgba(255, 255, 255, 0.3); /* Transparent white */
-    backdrop-filter: blur(10px); /* Blurring effect */
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Soft shadow for depth */
-    color: #fff; /* Ensure text is visible */
+    /*background-color: rgba(255, 255, 255, 0.3); /* Transparent white */
+    /*backdrop-filter: blur(10px); /* Blurring effect */
+    /*box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Soft shadow for depth */
+    /*color: #fff; Ensure text is visible*/
+    background: rgb(236, 236, 236);
     transition: background-color 0.3s ease;
     display: flex;
     flex-direction: column;
@@ -47,7 +48,7 @@
 /* Buttons */
 .audio_controls button {
     background: none;
-    color: rgba(255, 99, 71, 0.9);
+    color: black;
     border: none;
     padding: 10px 0px;
     border-radius: 5px;
@@ -59,64 +60,111 @@
 
 
 .audio_controls .play svg{
-    font-size: 30px;
+    font-size: 42px;
 }
 
 .audio_controls .reverse,
 .audio_controls .forward svg {
-    font-size: 20px;
+    font-size: 24px;
 }
 
 /* Seek Bar */
 .audio_controls input[type="range"] {
     width: 100%;
-    height: 5px;
+    height: 10px; /* Total height of the slider track */
     -webkit-appearance: none;
     appearance: none;
-    background: rgba(246, 197, 175, 0.9);
-    border-radius: 5px;
+    background: none; /* No default background since we are styling it */
+    position: relative;
     cursor: pointer;
-    transition: background 0.3s ease;
 }
 
+/* Track styling */
+.audio_controls input[type="range"]::-webkit-slider-runnable-track {
+    width: 100%;
+    height: 5px; /* Default track height */
+    background: linear-gradient(
+        to right,
+        rgb(44, 185, 255) var(--progress),
+        rgba(175, 218, 246, 0.9) var(--progress)
+    );
+    border-radius: 5px;
+}
+
+
+/* Thumb styling */
 .audio_controls input[type="range"]::-webkit-slider-thumb {
     -webkit-appearance: none;
     appearance: none;
-    width: 12px;
-    height: 12px;
-    background: rgb(3, 0, 67);
+    width: 14px;
+    height: 14px; /* Size of the thumb */
+    background: rgb(44, 185, 255);
     border-radius: 50%;
     cursor: pointer;
+    position: relative;
+    margin-top: -4px; /* Adjust to align with the track center */
     transition: transform 0.2s ease, background 0.3s ease;
 }
 
 .audio_controls input[type="range"]::-webkit-slider-thumb:hover {
     transform: scale(1.2);
-    background: rgba(255, 99, 71, 1);
+    background: rgb(50, 166, 255);
+    box-shadow: 0 0 0 6px rgba(135, 213, 252, 0.2);
 }
 
-
-/* Progress Bar for Audio */
-.audio_progress {
+/* For Firefox */
+.audio_controls input[type="range"]::-moz-range-track {
     width: 100%;
-    margin-top: 15px;
-    background: rgba(238, 238, 238, 0.2);
+    height: 5px;
+    background: rgba(175, 218, 246, 0.9);
     border-radius: 5px;
     position: relative;
-    height: 6px;
 }
 
-.audio_progress::after {
-    content: "";
-    position: absolute;
-    left: 0;
-    top: 0;
-    height: 100%;
-    width: 50%;
-    background: rgba(255, 127, 80, 1);
+.audio_controls input[type="range"]::-moz-range-progress {
+    height: 8px; /* Thicker for the played portion */
+    background: rgb(44, 185, 255);
     border-radius: 5px;
-    transition: width 0.3s ease;
 }
+
+.audio_controls input[type="range"]::-moz-range-thumb {
+    width: 14px;
+    height: 14px;
+    background: rgb(44, 185, 255);
+    border-radius: 50%;
+    cursor: pointer;
+    position: relative;
+    z-index: 3;
+}
+
+/* Wrapper for the icon and label */
+.icon-wrapper {
+    position: relative;
+    display: inline-block;
+    width: 24px; /* Adjust to match the size of the icon */
+    height: 24px; /* Adjust to match the size of the icon */
+}
+
+/* Label in the center of the icon */
+.icon-wrapper .icon-label {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 8px; /* Adjust the size of the text */
+    color: black; /* Contrast color for visibility */
+    font-weight: bold;
+    z-index: 2; /* Ensure it appears on top of the icon */
+    pointer-events: none; /* Prevent label from capturing mouse events */
+}
+
+/* Icon styling */
+.icon-wrapper svg {
+    z-index: 1; /* Ensure the icon is below the label */
+}
+
+
+
 
 /* Responsive Styling */
 @media (max-width: 768px) {

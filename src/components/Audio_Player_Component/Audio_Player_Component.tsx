@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import { useFileContext } from "../../App";
 import { useAudioContext } from "../Player_Component/Player_Component";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -62,6 +62,17 @@ const Audio_Player_Component = React.memo(() => {
     }
   }, [audioRef]);
 
+  // Update the --progress CSS variable dynamically
+  const updateProgress = useCallback(() => {
+    const percentage = (currentTime / duration) * 100;
+    document.documentElement.style.setProperty("--progress", `${percentage}%`);
+  }, [currentTime, duration]);
+
+  // Call this function whenever `currentTime` changes
+  useEffect(() => {
+    updateProgress();
+  }, [currentTime, updateProgress]);
+
   return (
     <div className="audio_player_container">
       {audioFile ? (
@@ -77,13 +88,19 @@ const Audio_Player_Component = React.memo(() => {
           <div className="audio_controls">
             <div className="buttons">
                 <button className="reverse" onClick={handleBackward}>
-                    <FontAwesomeIcon icon={faRotateLeft} />
+                    <div className="icon-wrapper">
+                        <span className="icon-label">-5</span>
+                        <FontAwesomeIcon icon={faRotateLeft} />
+                    </div>
                 </button>
                 <button className="play" onClick={togglePlayPause}>
                     <FontAwesomeIcon icon={isPlaying ? faPause : faPlay} />
                 </button>
                 <button className="forward" onClick={handleForward}>
-                    <FontAwesomeIcon icon={faRotateRight} />
+                  <div className="icon-wrapper">
+                      <span className="icon-label">+5</span>
+                      <FontAwesomeIcon icon={faRotateRight} />
+                  </div>
                 </button>
             </div>
             <input
